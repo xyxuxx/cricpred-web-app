@@ -11,16 +11,12 @@ st.set_page_config(
     initial_sidebar_state = 'auto',
 )
 
-teams = ['Australia', 'Zimbabwe', 'India', 'Bangladesh', 'New Zealand',
-       'South Africa', 'England', 'West Indies', 'Ireland', 'Afghanistan',
-       'Pakistan', 'Sri Lanka', 'Netherlands']
-
 
 #nav
 selected = option_menu(
     menu_title=None,
-    options=['Home', 'Guide', 'T20', 'About'],
-    icons=['bi bi-house', 'bi bi-file-earmark-fill', 'bi bi-cpu', 'bi bi-exclamation-square'],
+    options=['Home', 'Guide', 'T20', 'BPL', 'About'],
+    icons=['bi bi-house', 'bi bi-file-earmark-fill', 'bi bi-cpu', 'bi bi-cpu', 'bi bi-exclamation-square'],
     default_index=0,
     orientation='horizontal',
     )
@@ -42,44 +38,74 @@ if selected == 'Home':
 
 # guide
 if selected == 'Guide':
-    st.html('''
-                            <h2>Guide for T20 Prediction in CricPred</h2>
-                    ''')
-    st.markdown(
-        '''
-        **Choose Prediction Type:** Select either `1st innings Projected Score` or `Win probability based on 2nd innings`.
+    guide = st.selectbox('Select model for it\'s guide:',
+                        ('T20 International Model', 'BPL Model'))
 
-        2. Entering Match Details
-        - Teams: Choose the batting and bowling teams from the dropdown lists.
-        - Venue: Select the match venue from the provided options. 
-        - Toss Winner: Specify whether the batting team won the toss.
-        3. Input Match Stats: For both prediction types, enter the following match stats:
-        - Overs completed: Number of overs completed.
-        - Balls bowled: Total balls bowled so far.
-        - Current runs: Runs scored by the batting team.
-        - Wickets: Number of wickets lost by the batting team.
-        - Powerplay Stats:
-            - Powerplay Runs: Runs scored during the powerplay.
-            - Powerplay Wickets: Wickets lost during the powerplay.
-        - Last Five Overs Stats:
-            - Runs scored in last five overs.
-            - Wickets gone in last five overs.
-        4. For the `Win probability based on 2nd innings` option, additional inputs include:
-        - Target: The target score set by the first team.
-        5. Generate Prediction
-        - Click on `Predict`: After entering all inputs, click `Predict` to generate the prediction.
-            - Projected Score (1st innings): Displays the estimated total score the batting team may achieve.
-            - Win Probability (2nd innings): Shows the probability of either team winning based on the current match situation.
+    if guide == 'T20 International Model':
+        st.html('''
+                        <h2>Guide for T20 International Match Prediction in CricPred</h2>
+                        ''')
+        st.markdown(
+            '''
+            **Choose Prediction Type:** Select either `1st innings Projected Score` or `Win probability based on 2nd innings`.
+    
+            2. Entering Match Details
+            - Teams: Choose the batting and bowling teams from the dropdown lists.
+            - Venue: Select the match venue from the provided options. 
+            3. Input Match Stats: For both prediction types, enter the following match stats:
+            - Overs completed: Number of overs completed.
+            - Balls bowled: Total balls bowled so far.
+            - Current runs: Runs scored by the batting team.
+            - Wickets: Number of wickets lost by the batting team.
+            - Last Five Overs Stats (`1st innings Projected Score`):
+                - Runs scored in last five overs.
+                - Wickets gone in last five overs.
+            4. For the `Win probability based on 2nd innings` option, additional inputs include:
+            - Target: The target score set by the first team.
+            5. Generate Prediction
+            - Click on `Predict`: After entering all inputs, click `Predict` to generate the prediction.
+                - Projected Score (1st innings): Displays the estimated total score the batting team may achieve.
+                - Win Probability (2nd innings): Shows the probability of either team winning based on the current match situation.
+    
+            `Note`: For predicting `1st innings Projected Score` of any match, you have the the match data till 5 overs at least.  
+            '''
+        )
+    if guide == 'BPL Model':
+        st.html('''
+                            <h2>Guide for BPL Match Prediction in CricPred</h2>
+                        ''')
+        st.markdown(
+            '''
+            **Choose Prediction Type:** Select either `1st innings Projected Score` or `Win probability based on 2nd innings`.
 
-        `Note`: For predicting T20 match, you have the the match data till 5 overs at least.  
-        '''
-    )
+            2. Entering Match Details
+            - Teams: Choose the batting and bowling teams from the dropdown lists.
+            - Venue: Select the match venue from the provided options. 
+            3. Input Match Stats: For both prediction types, enter the following match stats:
+            - Overs completed: Number of overs completed.
+            - Balls bowled: Total balls bowled so far.
+            - Current runs: Runs scored by the batting team.
+            - Wickets: Number of wickets lost by the batting team.
+            - Last Five Overs Stats:
+                - Runs scored in last five overs.
+                - Wickets gone in last five overs.
+            4. Generate Prediction
+            - Click on `Predict`: After entering all inputs, click `Predict` to generate the prediction.
+                - Projected Score (1st innings): Displays the estimated total score the batting team may achieve.
+
+            `Note`: For predicting `1st innings Projected Score` of any match, you have the the match data till 5 overs at least.  
+            '''
+        )
 
 # T20
 if selected == 'T20':
     st.html('''
-                <h2>T20 Match Predictor</h2>
+                <h2>T20 International Match Predictor</h2>
             ''')
+    teams = ['Australia', 'Zimbabwe', 'India', 'Bangladesh', 'New Zealand',
+             'South Africa', 'England', 'West Indies', 'Ireland', 'Afghanistan',
+             'Pakistan', 'Sri Lanka', 'Netherlands']
+
     venue = ['AMI Stadium',
              'Adelaide Oval',
              'Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1)',
@@ -331,32 +357,133 @@ if selected == 'T20':
                 st.subheader(f'{batting_team} : {round(win)}%', anchor=False)
                 st.subheader(f'{bowling_team} : {round(loss)}%', anchor=False)
 
+# BPL
+if selected == 'BPL':
+    st.html('''
+                <h2>Bangladesh Premier League (BPL) Match Predictor</h2>
+            ''')
+    teams = ['Rangpur Riders',
+             'Fortune Barishal',
+             'Dhaka Capitals',
+             'Durbar Rajshahi',
+             'Chittagong Kings',
+             'Khulna Tigers',
+             'Sylhet Strikers']
+
+    venue = ['MA Aziz Stadium, Chittagong',
+             'Sheikh Abu Naser Stadium, Khulna',
+             'Shere Bangla National Stadium, Mirpur',
+             'Sylhet International Cricket Stadium',
+             'Zahur Ahmed Chowdhury Stadium, Chittagong']
+
+
+
+
+    st.markdown(f'Fill the input values for: `1st innings Projected Score`')
+
+    # 1st innings projected score
+    col1, col2 = st.columns(2)
+    with col1:
+        batting_team = st.selectbox(
+                    'Batting Team',
+                    sorted(teams),
+                )
+    with col2:
+        bowling_team = st.selectbox(
+                    'Bowling Team',
+                    sorted(teams),
+                )
+
+
+    venue = st.selectbox(
+                    'Venue',
+                    venue,
+            )
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        over = st.number_input('Overs completed', format='%0.0f')
+    with col2:
+        ball = st.number_input('Balls bowled', format='%0.0f')
+    with col3:
+        wickets = st.number_input('Wickets', format='%0.0f')
+    with col4:
+        current_runs = st.number_input('Current runs', format='%0.0f')
+
+    col1, col2 = st.columns(2)
+    with col1:
+        last_five_runs = st.number_input('Runs scored in last five overs', format='%0.0f')
+    with col2:
+        last_five_wicket = st.number_input('Wickets gone in last five overs', format='%0.0f')
+
+    if st.button('Predict', type='primary'):
+        if batting_team != bowling_team:
+            balls_left = 120 - ((over * 6) + ball)
+            wickets_left = 10 - wickets
+            crr = (current_runs * 6) / ((over * 6) + ball)
+
+            df = pd.DataFrame({'batting_team':[batting_team],
+                                'bowling_team':[bowling_team],
+                                'venue':[venue],
+                                'balls_left':[balls_left],
+                                'wickets_left':[wickets_left],
+                                'current_runs':[current_runs],
+                                'current_run_rate':[crr],
+                                'last_five_runs':[last_five_runs],
+                                'last_five_wickets':[last_five_wicket]})
+
+            model = pickle.load(open('models/bpl_proj_model.pkl', 'rb'))
+            pred_score = model.predict(df)
+
+            st.subheader(f'Projected Score: {round(pred_score[0])}', anchor=False)
+
+
 # About
 if selected == "About":
-    st.markdown('''This app aims to predict `men's` cricket match outcomes across international <span style='text-decoration: line-through double red;'>and 
-                club-level </span>matches. Leveraging extensive historical data, this app provides fans and analysts with insights into game results, 
+
+    st.markdown('''This app aims to predict `men's` cricket match outcomes across international and 
+                club-level matches. Leveraging extensive historical data, this app provides fans and analysts with insights into game results, 
                 factoring in team performance, and match conditions. From Tests to T20s, this predictive tool brings data-driven excitement to every 
                 cricket match.''', unsafe_allow_html=True)
     st.html('''
                 <h2>About The Models</h2>
             ''')
-    st.markdown(
-        '''
-        T20 Model: `1st Innings Projected Score`
-        
-        After performing 10 cross-validations on the model, the following metrics have been achieved:
-        - Mean Absolute Error (MAE): 1.88 – This metric indicates that, `on average`, the model's predictions deviate from the actual values by about 1.88 units.
-
-        - Root Mean Squared Error (RMSE): 3.77 – This metric demonstrates that `on average`, model's predicted values differ from the actual values by 3.77 units.
-
-        - R² Score: 98.75% – This metric score signifies that `on average`, our model explains 98.75% of the variance in the data, reflecting strong predictive power and high model reliability.
-        
-        T20 Model: `Win Probability based on 2nd Innings`
-        
-        After performing 10 cross-validations on the model, the following metrics have been achieved:
-        - Accuracy Score: 84% – This metric indicates that, on average, the model correctly predicts the outcome in approximately 84 out of every 100 cases during the training phase.
-        '''
-    )
+    model_info = st.selectbox('Select Model: ',
+                              ('T20 International Model', 'BPL Model'))
+    if model_info == 'T20 International Model':
+        st.markdown(
+            '''
+            `**` T20 Model: `1st Innings Projected Score`
+                
+            After performing 10 cross-validations on the model, the following metrics have been achieved:
+                
+            - Mean Absolute Error (MAE): 1.88 – This metric indicates that, `on average`, the model's predictions deviate from the actual values by about 1.88 units.
+            
+            - Root Mean Squared Error (RMSE): 3.77 – This metric demonstrates that `on average`, model's predicted values differ from the actual values by 3.77 units.
+            
+            - R² Score: 98.75% – This metric score signifies that `on average`, our model explains 98.75% of the variance in the data, reflecting strong predictive power and high model reliability.
+                    
+            T20 Model: `Win Probability based on 2nd Innings`
+                    
+            After performing 10 cross-validations on the model, the following metrics have been achieved:
+            
+            - Accuracy Score: 84% – This metric indicates that, on average, the model correctly predicts the outcome in approximately 84 out of every 100 cases during the training phase.
+            '''
+        )
+    if model_info == 'BPL Model':
+        st.markdown(
+            '''
+            `**` BPL Model: `1st Innings Projected Score`
+            
+            After performing 10 cross-validations on the model, the following metrics have been achieved:
+            
+            - Mean Absolute Error (MAE): 2.90 – This metric indicates that, `on average`, the model's predictions deviate from the actual values by about 2.90 units.
+            
+            - Root Mean Squared Error (RMSE): 5.66 – This metric demonstrates that `on average`, model's predicted values differ from the actual values by 5.66 units.
+            
+            - R² Score: 96.5% – This metric score signifies that `on average`, our model explains 96.5% of the variance in the data, reflecting strong predictive power and high model reliability.
+            '''
+        )
 
 # Footer
 footer = """
