@@ -97,7 +97,7 @@ if selected == 'Guide':
         )
     if guide == 'IPL Model':
         st.html('''
-                                <h2>Guide for T20 International Match Prediction in CricPred</h2>
+                                <h2>Guide for IPL Match Prediction in CricPred</h2>
                                 ''')
         st.markdown(
             '''
